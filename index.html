@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>MindAR — AR Video + Buttons in Scene</title>
+    <title>MindAR — Icons Only</title>
 
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
@@ -15,44 +15,18 @@
         position:absolute; z-index:2; color:#fff;
         padding:8px 12px; border-radius:8px; font-size:13px;
       }
+
       #note   { left:8px; top:8px; background:rgba(0,0,0,0.65); }
       #markerStatus { right:8px; top:8px; background:rgba(200,0,0,0.7); }
       #markerStatus.found { background:rgba(0,150,0,0.7); }
-
-      #controls {
-        position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
-        z-index:9999; background:rgba(0,0,0,0.85); padding:15px 25px;
-        border-radius:12px; display:none; gap:15px; align-items:center;
-      }
-      #controls.visible { display:flex !important; }
-
-      .control-btn {
-        background:#2196F3; color:#fff; border:none; width:50px; height:50px;
-        border-radius:50%; cursor:pointer; font-size:20px; display:flex;
-        align-items:center; justify-content:center; box-shadow:0 4px 8px rgba(0,0,0,0.3);
-        transition:all .3s;
-      }
-      .control-btn:hover { transform:scale(1.1); box-shadow:0 6px 12px rgba(0,0,0,0.4); }
-      .control-btn:active { transform:scale(.95); }
-
-      #playPauseBtn { background:#2196F3; width:60px; height:60px; font-size:24px; }
-      #playPauseBtn.playing { background:#FFC107; }
-      #restartBtn { background:#4CAF50; }
-      #muteBtn { background:#FF9800; }
-      #muteBtn.unmuted { background:#4CAF50; }
     </style>
   </head>
+
   <body>
     <div id="note">
       Point your camera at the <strong>Image Target</strong>.<br>Allow camera access when prompted.
     </div>
     <div id="markerStatus">Target Not Found</div>
-
-    <div id="controls">
-      <button id="restartBtn" class="control-btn" title="Restart">↻</button>
-      <button id="playPauseBtn" class="control-btn" title="Play/Pause">▶</button>
-      <button id="muteBtn" class="control-btn" title="Mute/Unmute">🔇</button>
-    </div>
 
     <a-scene
       mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/ElwinRoy/ar-business-card/targets%20(1).mind;"
@@ -61,10 +35,44 @@
       vr-mode-ui="enabled:false"
       device-orientation-permission-ui="enabled:false"
     >
+
       <a-assets>
-        <video id="video"
-               src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-               preload="auto" loop crossorigin="anonymous"></video>
+
+        <!-- CALL ICON SVG -->
+        <img id="callIconImg" src="data:image/svg+xml;utf8,
+          <svg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 24 24' fill='white'>
+            <rect width='24' height='24' rx='4' fill='%232196F3'/>
+            <path d='M6.62 10.79a15.465 15.465 0 006.59 6.59l2.2-2.2a1 1 0 011.05-.24c1.12.37 2.33.57 3.54.57a1 1 0 011 1v3.5a1 1 0 01-1 1A17.93 17.93 0 012 6a1 1 0 011-1h3.5a1 1 0 011 1c0 1.21.2 2.42.57 3.54a1 1 0 01-.24 1.05l-2.2 2.2z'/>
+          </svg>">
+
+        <!-- WEBSITE ICON SVG -->
+        <img id="webIconImg" src="data:image/svg+xml;utf8,
+          <svg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 24 24' fill='white'>
+            <rect width='24' height='24' rx='4' fill='%23FF5722'/>
+            <path d='M12 2a10 10 0 100 20 10 10 0 000-20zm1 17.93V20h-2v-.07A8.001 8.001 0 014.07 13H4v-2h.07A8.001 8.001 0 0111 4.07V4h2v.07A8.001 8.001 0 0119.93 11H20v2h-.07A8.001 8.001 0 0113 19.93z'/>
+          </svg>">
+
+        <!-- FACEBOOK ICON -->
+        <img id="fbIconImg" src="data:image/svg+xml;utf8,
+          <svg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 24 24' fill='white'>
+            <rect width='24' height='24' rx='4' fill='%231877F2'/>
+            <path d='M13 10h3l-.5 4H13v8h-4v-8H7v-4h2V8c0-2.2 1.3-5 5-5h3v4h-2c-.9 0-2 .5-2 2v1z'/>
+          </svg>">
+
+        <!-- INSTAGRAM ICON -->
+        <img id="igIconImg" src="data:image/svg+xml;utf8,
+          <svg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 24 24' fill='white'>
+            <rect width='24' height='24' rx='4' fill='%23E1306C'/>
+            <path d='M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm5 5a5 5 0 100 10 5 5 0 000-10zm6.5-.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z'/>
+          </svg>">
+
+        <!-- LINKEDIN ICON -->
+        <img id="lnIconImg" src="data:image/svg+xml;utf8,
+          <svg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 24 24' fill='white'>
+            <rect width='24' height='24' rx='4' fill='%230A66C2'/>
+            <path d='M6.5 9h3v9h-3V9zm1.5-5a1.75 1.75 0 110 3.5A1.75 1.75 0 018 4zm4 5h3v1.3c.4-.6 1.4-1.5 3.1-1.5 3.3 0 3.9 2.2 3.9 5V18h-3v-3.5c0-1.1-.1-2.5-1.7-2.5-1.7 0-1.9 1.2-1.9 2.4V18h-3V9z'/>
+          </svg>">
+
       </a-assets>
 
       <a-camera 
@@ -74,38 +82,64 @@
         raycaster="objects:.clickable">
       </a-camera>
 
-      <a-entity mindar-image-target="targetIndex:0">
+      <!-- MAIN MARKER -->
+      <a-entity id="mainMarker" mindar-image-target="targetIndex:0">
 
-        <a-plane id="video-plane"
-                 position="0 0 0.001" rotation="0 0 0"
-                 width="1.6" height="0.9"
-                 material="shader:flat; src:#video;"></a-plane>
+        <!-- LEFT SIDE: CALL + WEBSITE -->
+       <!-- LEFT COLUMN (Email → Call → Website) -->
+<!-- LEFT COLUMN (Email → Call → Website) -->
+<a-plane id="callBtnAR"
+         class="clickable"
+         position="-0.75 0.30 0.01"
+         width="0.55"
+         height="0.25"
+         material="src:#callIconImg; transparent:true;"
+         link-trigger="action: call"
+         visible="false">
+</a-plane>
 
-        <a-plane position="0 0 0" rotation="0 0 0"
-                 width="2" height="1.3"
-                 color="#000000" material="opacity:0.9; transparent:true;"></a-plane>
+<a-plane id="websiteBtnAR"
+         class="clickable"
+         position="-0.75 -0.30 0.01"
+         width="0.55"
+         height="0.25"
+         material="src:#webIconImg; transparent:true;"
+         link-trigger="action: website"
+         visible="false">
+</a-plane>
 
-        <a-plane id="callBtnAR" class="clickable"
-                 position="-0.45 -0.55 0.01"
-                 width="0.7" height="0.15"
-                 color="#2196F3"
-                 material="shader:flat; opacity:0.9; transparent:true;"
-                 visible="false">
-          <a-text value="Call Now"
-                  align="center" color="#fff"
-                  width="2.5" position="0 0 0.01"></a-text>
-        </a-plane>
+<!-- RIGHT COLUMN (Facebook → Instagram → LinkedIn) -->
+<a-plane id="fbBtnAR"
+         class="clickable"
+         position="0.75 0.30 0.01"
+         width="0.35"
+         height="0.20"
+         material="src:#fbIconImg; transparent:true;"
+         link-trigger="action: facebook"
+         visible="false">
+</a-plane>
 
-        <a-plane id="websiteBtnAR" class="clickable"
-                 position="0.45 -0.55 0.01"
-                 width="0.7" height="0.15"
-                 color="#FF5722"
-                 material="shader:flat; opacity:0.9; transparent:true;"
-                 visible="false">
-          <a-text value="Visit Website"
-                  align="center" color="#fff"
-                  width="2.5" position="0 0 0.01"></a-text>
-        </a-plane>
+<a-plane id="igBtnAR"
+         class="clickable"
+         position="0.75 0.00 0.01"
+         width="0.35"
+         height="0.20"
+         material="src:#igIconImg; transparent:true;"
+         link-trigger="action: instagram"
+         visible="false">
+</a-plane>
+
+<a-plane id="lnBtnAR"
+         class="clickable"
+         position="0.75 -0.30 0.01"
+         width="0.35"
+         height="0.20"
+         material="src:#lnIconImg; transparent:true;"
+         link-trigger="action: linkedin"
+         visible="false">
+</a-plane>
+
+
       </a-entity>
 
       <a-entity light="type:ambient; intensity:1; color:#ffffff"></a-entity>
@@ -113,104 +147,135 @@
 
     <script>
       const sceneEl      = document.querySelector('a-scene');
-      const video        = document.getElementById('video');
+      const markerEl     = document.getElementById('mainMarker');
       const markerStatus = document.getElementById('markerStatus');
-      const playPauseBtn = document.getElementById('playPauseBtn');
-      const muteBtn      = document.getElementById('muteBtn');
-      const restartBtn   = document.getElementById('restartBtn');
-      const controls     = document.getElementById('controls');
+
       const callBtnAR    = document.getElementById('callBtnAR');
       const websiteBtnAR = document.getElementById('websiteBtnAR');
-
-      let isPlaying = false;
-      let isMuted   = true;
-      video.muted = true;
-
-      playPauseBtn.addEventListener('click', () => {
-        if (isPlaying) {
-          pauseVideo();
-          playPauseBtn.textContent = '▶';
-          playPauseBtn.classList.remove('playing');
-        } else {
-          playVideo();
-          playPauseBtn.textContent = '⏸';
-          playPauseBtn.classList.add('playing');
-        }
-      });
-
-      muteBtn.addEventListener('click', () => {
-        isMuted = !isMuted;
-        video.muted = isMuted;
-        muteBtn.textContent = isMuted ? '🔇' : '🔊';
-        muteBtn.classList.toggle('unmuted', !isMuted);
-      });
-
-      restartBtn.addEventListener('click', () => {
-        video.currentTime = 0;
-        if (!isPlaying) {
-          playVideo();
-          playPauseBtn.textContent = '⏸';
-          playPauseBtn.classList.add('playing');
-        }
-      });
+      const fbBtnAR      = document.getElementById('fbBtnAR');
+      const igBtnAR      = document.getElementById('igBtnAR');
+      const lnBtnAR      = document.getElementById('lnBtnAR');
 
       AFRAME.registerComponent('link-trigger', {
         schema: {action: {type: 'string'}},
         init: function () {
           this.el.addEventListener('click', () => {
             const action = this.data.action;
+
             if (action === 'call') {
-              console.log('Call button clicked');
               window.location.href = 'tel:+919902319932';
-            } else if (action === 'website') {
-              console.log('Website button clicked');
+            } 
+            else if (action === 'website') {
               window.open('https://4point2tech.com/', '_blank');
+            }
+            else if (action === 'facebook') {
+              window.open("https://www.facebook.com/4point2tech/", "_blank");
+            }
+            else if (action === 'instagram') {
+              window.open("https://www.instagram.com/4point2tech/?hl=en", "_blank");
+            }
+            else if (action === 'linkedin') {
+              window.open("https://www.linkedin.com/company/4point2tech/?originalSubdomain=in", "_blank");
             }
           });
         }
       });
 
-      sceneEl.addEventListener('targetFound', () => {
+      function refreshRaycaster() {
+        const cam = document.querySelector('a-camera');
+        if (cam && cam.components && cam.components.raycaster && typeof cam.components.raycaster.refreshObjects === 'function') {
+          try { cam.components.raycaster.refreshObjects(); }
+          catch(e){ console.warn('raycaster.refreshObjects failed:', e); }
+        }
+      }
+
+      markerEl.addEventListener('targetFound', () => {
         markerStatus.classList.add('found');
         markerStatus.textContent = 'Target Found';
-        controls.classList.add('visible');
 
         callBtnAR.setAttribute('visible', true);
         websiteBtnAR.setAttribute('visible', true);
+        fbBtnAR.setAttribute('visible', true);
+        igBtnAR.setAttribute('visible', true);
+        lnBtnAR.setAttribute('visible', true);
 
-        callBtnAR.setAttribute('link-trigger', 'action: call');
-        websiteBtnAR.setAttribute('link-trigger', 'action: website');
-
-        if (!isPlaying) {
-          playVideo();
-          playPauseBtn.textContent = '⏸';
-          playPauseBtn.classList.add('playing');
-        }
+        setTimeout(refreshRaycaster, 120);
       });
 
-      sceneEl.addEventListener('targetLost', () => {
+      markerEl.addEventListener('targetLost', () => {
         markerStatus.classList.remove('found');
         markerStatus.textContent = 'Target Not Found';
-        controls.classList.remove('visible');
+
         callBtnAR.setAttribute('visible', false);
         websiteBtnAR.setAttribute('visible', false);
-        pauseVideo();
-        playPauseBtn.textContent = '▶';
-        playPauseBtn.classList.remove('playing');
+        fbBtnAR.setAttribute('visible', false);
+        igBtnAR.setAttribute('visible', false);
+        lnBtnAR.setAttribute('visible', false);
       });
-
-      function playVideo() {
-        video.play().then(() => { isPlaying = true; })
-        .catch(err => console.error('Play error:', err));
-      }
-
-      function pauseVideo() {
-        video.pause();
-        isPlaying = false;
-      }
 
       sceneEl.addEventListener('arReady', () => console.log('MindAR ready'));
       sceneEl.addEventListener('arError', e => console.error('MindAR error:', e.detail));
+
+      (function setupManualRaycast(){
+        const THREE = AFRAME.THREE;
+        const raycaster = new THREE.Raycaster();
+        const camEl = document.querySelector('a-camera');
+
+        function getIntersections(clientX, clientY) {
+          const x = ( clientX / window.innerWidth ) * 2 - 1;
+          const y = - ( clientY / window.innerHeight ) * 2 + 1;
+          const threeCamera = camEl && camEl.getObject3D('camera');
+          if (!threeCamera) return [];
+          raycaster.setFromCamera({ x, y }, threeCamera);
+
+          const clickableEls = Array.from(document.querySelectorAll('.clickable'));
+          const meshes = clickableEls
+            .map(el => ({ el, mesh: el.getObject3D('mesh') }))
+            .filter(obj => obj.mesh);
+
+          const meshObjects = meshes.map(m => m.mesh);
+          const intersects = raycaster.intersectObjects(meshObjects, true);
+          if (intersects.length === 0) return [];
+
+          for (let inter of intersects) {
+            for (let m of meshes) {
+              if (m.mesh === inter.object || m.mesh.children.includes(inter.object) || inter.object.parent === m.mesh) {
+                return [m.el, inter];
+              }
+              let current = inter.object;
+              while (current) {
+                if (current === m.mesh) return [m.el, inter];
+                current = current.parent;
+              }
+            }
+          }
+          return [];
+        }
+
+        function onPointerDown(evt) {
+          const clientX = (evt.touches && evt.touches[0]) ? evt.touches[0].clientX : evt.clientX;
+          const clientY = (evt.touches && evt.touches[0]) ? evt.touches[0].clientY : evt.clientY;
+          const hit = getIntersections(clientX, clientY);
+          if (hit && hit.length) {
+            const el = hit[0];
+            el.emit('click', {detail: {source: 'manualRaycast'}}, false);
+
+            try { el.click && el.click(); } catch(e){}
+
+            el.object3D.scale.set(0.95,0.95,0.95);
+            setTimeout(()=> { if (el.object3D) el.object3D.scale.set(1,1,1); }, 120);
+
+            evt.preventDefault();
+            evt.stopPropagation();
+          }
+        }
+
+        window.addEventListener('pointerdown', onPointerDown, {passive: false});
+        window.addEventListener('touchstart', onPointerDown, {passive: false});
+
+        console.log('Manual raycast handler installed');
+      })();
     </script>
+
   </body>
 </html>
