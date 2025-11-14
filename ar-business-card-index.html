@@ -1,188 +1,222 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AR Business Card</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>AR Business Card — Premium</title>
 
-<style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background: black;
-    font-family: Arial, sans-serif;
-  }
+  <!-- model-viewer (latest) -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js"></script>
 
-  #ui {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    z-index: 999;
-    color: white;
-  }
-
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  #start {
-    background: dodgerblue;
-    color: white;
-  }
-
-  #reset {
-    background: orange;
-    color: white;
-  }
-</style>
-
-<!-- THREE.JS CDN -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-
+  <style>
+    :root{--bg:#05060a;--ui:#0b1220;--accent:#08c;}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#020214,#071025);color:#e7f7ff;min-height:100vh}
+    header{display:flex;align-items:center;gap:12px;padding:12px 16px}
+    header h1{font-size:18px;margin:0;color:#bfeaff}
+    main{display:grid;grid-template-columns:1fr 340px;gap:18px;padding:18px}
+    .viewerWrap{background:linear-gradient(180deg,#02021488,#0b122088);border-radius:12px;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh}
+    model-viewer{width:100%;height:70vh;border-radius:10px; background:transparent}
+    aside{width:320px;padding:12px;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid rgba(140,200,255,0.04)}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,#08c,#06a);color:#001;font-weight:800;cursor:pointer;margin:6px 4px}
+    .btn.alt{background:linear-gradient(90deg,#ff9a3c,#ff6a00);color:#08010b}
+    .muted{opacity:0.85;font-size:13px;color:#cfe}
+    .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .toggle{display:flex;align-items:center;gap:8px}
+    .nameplate{margin-top:12px;padding:10px;border-radius:8px;background:linear-gradient(90deg,#0006,#ffffff04);text-align:center}
+    footer{padding:12px;text-align:center;color:#9fd3ff;opacity:0.8;font-size:13px}
+    a.link{color:#9ff;text-decoration:underline}
+  </style>
 </head>
 <body>
 
-<div id="ui">
-  <span>Tap Start → Point at floor → Tap to place card</span>
-  <button id="start">Start AR</button>
-  <button id="reset">Reset</button>
-</div>
+<header>
+  <h1>AR Business Card — Premium</h1>
+  <div class="muted">Place, animate, link & share (iOS + Android)</div>
+</header>
+
+<main>
+  <section class="viewerWrap">
+    <!-- model-viewer: put your files as src and ios-src -->
+    <!-- IMPORTANT: Replace card.glb and card.usdz with your actual filenames if different -->
+    <model-viewer id="mv"
+      src="card.glb"
+      ios-src="card.usdz"
+      alt="Business Card 3D model"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      ar-scale="auto"
+      environment-image="neutral"
+      camera-controls
+      exposure="1"
+      auto-rotate
+      interaction-prompt="auto"
+      shadow-intensity="1">
+    </model-viewer>
+
+    <div class="nameplate" id="nameplate">
+      <div style="font-weight:900;font-size:18px">SHIVA KUMAR K</div>
+      <div style="font-weight:700; color:#ffd6c2">Founder, M.D — 4Point2Tech</div>
+    </div>
+
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="placeBtn">Place in AR</button>
+      <button class="btn" id="animBtn">Play / Pause Anim</button>
+      <button class="btn alt" id="vcfBtn">Download vCard</button>
+    </div>
+  </section>
+
+  <aside>
+    <div style="font-weight:900">Controls & Info</div>
+    <div class="muted" style="margin-top:8px">Tap <strong>Place in AR</strong> to start AR. On iPhone Quick Look will open. On Android Scene Viewer / WebXR will open if supported.</div>
+
+    <div style="margin-top:12px">
+      <div style="font-weight:800">Links</div>
+      <div class="muted" style="margin-top:6px">
+        <div>📞 <a class="link" href="tel:+919148988344">+91 91489 88344</a></div>
+        <div>✉️ <a class="link" href="mailto:shivakumar@4point2tech.com">shivakumar@4point2tech.com</a></div>
+        <div>🌐 <a class="link" href="https://4point2tech.com" target="_blank">4point2tech.com</a></div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div style="font-weight:800">AR / iOS Notes</div>
+      <div class="muted" style="margin-top:6px">
+        • iOS uses <strong>Quick Look</strong> (USDZ). Convert your GLB→USDZ for iPhone. <br>
+        • Android uses Scene Viewer (or WebXR if supported).<br>
+        • If you need conversion help, I can convert your GLB for you.
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div style="font-weight:800">Advanced</div>
+      <label class="toggle"><input id="floating" type="checkbox"/> Floating nameplate</label>
+      <label class="toggle"><input id="autoRotate" type="checkbox" checked/> Auto-rotate</label>
+      <label class="toggle"><input id="shadow" type="checkbox" checked/> Soft shadow</label>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  Place the card → Tap the card to open website / LinkedIn. Works in Safari iOS (Quick Look) & Chrome Android.
+</footer>
 
 <script>
-let xrSession = null;
-let gl = null;
-let renderer = null;
-let referenceSpace = null;
-let hitTestSource = null;
-let cardPlaced = false;
+/* ---------- helpers ---------- */
+const mv = document.getElementById('mv');
+const placeBtn = document.getElementById('placeBtn');
+const animBtn = document.getElementById('animBtn');
+const vcfBtn = document.getElementById('vcfBtn');
+const nameplate = document.getElementById('nameplate');
+const floatCheckbox = document.getElementById('floating');
+const autoRotate = document.getElementById('autoRotate');
+const shadowCheckbox = document.getElementById('shadow');
 
-let scene, camera, card;
+let animPlaying = true;
 
-document.getElementById("start").addEventListener("click", startAR);
-document.getElementById("reset").addEventListener("click", () => location.reload());
-
-async function startAR() {
-  if (!navigator.xr) {
-    alert("WebXR not supported.");
-    return;
+/* ---------- AR button action ----------
+ model-viewer handles platform differences:
+ - on iOS Quick Look will be used automatically if ios-src is provided
+ - on Android Scene Viewer or WebXR will be used depending on support
+We just call .enterAR() to request AR session where possible.
+----------------------------------------*/
+placeBtn.addEventListener('click', async () => {
+  // model-viewer exposes showPoster / enterAR depending on support
+  try {
+    // request AR — opens Quick Look on iOS automatically
+    if (mv.enterAR) {
+      await mv.enterAR(); // triggers platform AR flow
+    } else {
+      // fallback: try to open quick-look directly (iOS). Build a link if needed.
+      alert('AR not available directly — use the AR button on supported mobile browsers.');
+    }
+  } catch (e) {
+    console.error('AR start failed', e);
+    alert('Failed to start AR: ' + (e && e.message ? e.message : e));
   }
+});
 
-  const supported = await navigator.xr.isSessionSupported("immersive-ar");
-  if (!supported) {
-    alert("AR not supported on this device/browser.");
-    return;
+/* ---------- Play/pause animation ----------
+ If your GLB contains animations, model-viewer can play/pause them.
+----------------------------------------*/
+animBtn.addEventListener('click', () => {
+  // model-viewer API exposes play() and pause()
+  if (animPlaying) {
+    mv.pause();
+    animBtn.textContent = 'Play Anim';
+  } else {
+    mv.play();
+    animBtn.textContent = 'Pause Anim';
   }
+  animPlaying = !animPlaying;
+});
 
-  xrSession = await navigator.xr.requestSession("immersive-ar", {
-    requiredFeatures: ["hit-test", "dom-overlay"],
-    domOverlay: { root: document.body }
-  });
+/* ---------- Click on the 3D model ---------- */
+/* model-viewer dispatches 'click' events and 'interaction' events depending on platform.
+   We'll use 'click' to open the website (works on desktop and mobile preview) */
+mv.addEventListener('click', (ev) => {
+  // If user tapped the model — open the site
+  window.open('https://4point2tech.com', '_blank');
+});
 
-  setupWebGL();
-}
+/* ---------- vCard download ----------
+Create a .vcf dynamically and trigger download.
+----------------------------------------*/
+vcfBtn.addEventListener('click', () => {
+  const vcf = [
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    'FN:SHIVA KUMAR K',
+    'ORG:4Point2Tech',
+    'TITLE:Founder, M.D',
+    'TEL;TYPE=WORK,VOICE:+919148988344',
+    'EMAIL;TYPE=PREF,INTERNET:shivakumar@4point2tech.com',
+    'URL:https://4point2tech.com',
+    'END:VCARD'
+  ].join('\\n');
 
-function setupWebGL() {
-  const canvas = document.createElement("canvas");
-  document.body.appendChild(canvas);
+  const blob = new Blob([vcf], { type: 'text/vcard' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'shiva_kumar_k.vcf';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
 
-  gl = canvas.getContext("webgl", { xrCompatible: true });
+/* ---------- UI toggles ---------- */
+floatCheckbox.addEventListener('change', () => {
+  nameplate.style.display = floatCheckbox.checked ? 'block' : 'none';
+});
 
-  renderer = new THREE.WebGLRenderer({
-    alpha: true,
-    preserveDrawingBuffer: true,
-    canvas: canvas
-  });
-  renderer.autoClear = false;
+/* auto-rotate toggle manipulates attribute */
+autoRotate.addEventListener('change', () => {
+  if (autoRotate.checked) mv.setAttribute('auto-rotate', '');
+  else mv.removeAttribute('auto-rotate');
+});
 
-  xrSession.updateRenderState({
-    baseLayer: new XRWebGLLayer(xrSession, gl)
-  });
+/* shadow: model-viewer supports .shadow-intensity attribute
+   We'll toggle attribute for effect */
+shadowCheckbox.addEventListener('change', () => {
+  mv.setAttribute('shadow-intensity', shadowCheckbox.checked ? '1' : '0');
+});
 
-  xrSession.addEventListener("select", () => {
-    cardPlaced = true;
-    card.visible = true;
-  });
-
-  xrSession.requestReferenceSpace("viewer").then((viewerSpace) => {
-    xrSession.requestHitTestSource({ space: viewerSpace })
-      .then((source) => hitTestSource = source);
-  });
-
-  xrSession.requestReferenceSpace("local").then((refSpace) => {
-    referenceSpace = refSpace;
-    xrSession.requestAnimationFrame(onXRFrame);
-  });
-
-  setupScene();
-}
-
-function setupScene() {
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera();
-
-  const texture = new THREE.TextureLoader().load("card.png");
-
-  const geometry = new THREE.PlaneGeometry(0.15, 0.09);
-  const material = new THREE.MeshBasicMaterial({
-    map: texture,
-    side: THREE.DoubleSide,
-    transparent: true
-  });
-
-  card = new THREE.Mesh(geometry, material);
-  card.visible = false;
-
-  scene.add(card);
-}
-
-function onXRFrame(time, frame) {
-  let session = frame.session;
-  session.requestAnimationFrame(onXRFrame);
-
-  const pose = frame.getViewerPose(referenceSpace);
-  if (!pose) return;
-
-  renderer.clear();
-
-  const view = pose.views[0];
-  const viewport = session.renderState.baseLayer.getViewport(view);
-  renderer.setSize(viewport.width, viewport.height);
-
-  camera.matrix.fromArray(view.transform.matrix);
-  camera.projectionMatrix.fromArray(view.projectionMatrix);
-  camera.updateMatrixWorld(true);
-
-  if (!cardPlaced && hitTestSource) {
-    const hits = frame.getHitTestResults(hitTestSource);
-
-    if (hits.length > 0) {
-      const hit = hits[0];
-      const hitPose = hit.getPose(referenceSpace);
-
-      card.visible = true;
-
-      card.position.set(
-        hitPose.transform.position.x,
-        hitPose.transform.position.y,
-        hitPose.transform.position.z
-      );
-
-      const ori = hitPose.transform.orientation;
-      card.quaternion.set(ori.x, ori.y, ori.z, ori.w);
+/* ---------- Small device detection hint ----------
+ model-viewer will show AR button itself on some platforms — we keep our Place button as well.
+----------------------------------------*/
+(async function checkSupport(){
+  // availableARModes() returns supported AR modes (Scene Viewer, Quick Look, WebXR)
+  if (mv) {
+    try {
+      const modes = await mv.availableARModes;
+      console.log('AR modes available', modes);
+      // show hint text for iOS
+      if (modes && modes.includes('quick-look')) {
+        // quick-look available on iOS
+      }
+    } catch (e) {
+      // ignore
     }
   }
-
-  renderer.render(scene, camera);
-}
+})();
 </script>
 
 </body>
