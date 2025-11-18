@@ -144,7 +144,9 @@
 
     <a-entity id="mainMarker" mindar-image-target="targetIndex:0">
 
+      <!-- Both videos are clickable -->
       <a-plane id="videoPlane"
+               class="clickable"
                position="0 0.3 0.45"
                rotation="90 0 0"
                width="0.9"
@@ -153,7 +155,6 @@
                visible="false">
       </a-plane>
 
-      <!-- Bottom video is now clickable (pause/play on tap) -->
       <a-plane id="bottomVideoPlane"
                class="clickable"
                position="0 -0.65 0.01"
@@ -180,12 +181,6 @@
     const markerEl = document.getElementById('mainMarker');
     const markerStatus = document.getElementById('markerStatus');
 
-    const callBtnAR = document.getElementById('callBtnAR');
-    const websiteBtnAR = document.getElementById('websiteBtnAR');
-    const fbBtnAR = document.getElementById('fbBtnAR');
-    const igBtnAR = document.getElementById('igBtnAR');
-    const lnBtnAR = document.getElementById('lnBtnAR');
-
     const videoPlane = document.getElementById('videoPlane');
     const arVideo = document.getElementById('arVideo');
     const bottomVideoPlane = document.getElementById('bottomVideoPlane');
@@ -208,13 +203,15 @@
       }
     });
 
-    // THIS IS THE ONLY NEW PART — pause/play bottom video on tap
-    bottomVideoPlane.addEventListener('click', function () {
-      if (bottomVideo.paused) {
-        bottomVideo.play();
-      } else {
-        bottomVideo.pause();
-      }
+    // PAUSE/PLAY BOTH VIDEOS ON TAP — NOW WORKS ON MOBILE
+    videoPlane.addEventListener('click', () => {
+      if (arVideo.paused) arVideo.play();
+      else arVideo.pause();
+    });
+
+    bottomVideoPlane.addEventListener('click', () => {
+      if (bottomVideo.paused) bottomVideo.play();
+      else bottomVideo.pause();
     });
 
     function refreshRaycaster() {
@@ -226,42 +223,24 @@
     }
 
     markerEl.addEventListener('targetFound', () => {
-      console.log('Target found - showing content');
       markerStatus.classList.add('found');
       markerStatus.textContent = 'Target Found';
 
-      callBtnAR.setAttribute('visible', true);
-      websiteBtnAR.setAttribute('visible', true);
-      fbBtnAR.setAttribute('visible', true);
-      igBtnAR.setAttribute('visible', true);
-      lnBtnAR.setAttribute('visible', true);
-
+      document.querySelectorAll('#mainMarker .clickable').forEach(el => el.setAttribute('visible', true));
       videoPlane.setAttribute("visible", true);
       bottomVideoPlane.setAttribute("visible", true);
       
-      arVideo.play().then(() => console.log('Top video playing with sound')).catch(err => {
-        console.error('Top video play error:', err);
-        setTimeout(() => arVideo.play().catch(e => console.error('Retry failed:', e)), 500);
-      });
-
-      bottomVideo.play().catch(err => console.error('Bottom video play error:', err));
+      arVideo.play().catch(() => {});
+      bottomVideo.play().catch(() => {});
 
       setTimeout(refreshRaycaster, 120);
     });
 
     markerEl.addEventListener('targetLost', () => {
-      console.log('Target lost - hiding content');
       markerStatus.classList.remove('found');
       markerStatus.textContent = 'Target Not Found';
 
-      callBtnAR.setAttribute('visible', false);
-      websiteBtnAR.setAttribute('visible', false);
-      fbBtnAR.setAttribute('visible', false);
-      igBtnAR.setAttribute('visible', false);
-      lnBtnAR.setAttribute('visible', false);
-
-      videoPlane.setAttribute("visible", false);
-      bottomVideoPlane.setAttribute("visible", false);
+      document.querySelectorAll('#mainMarker .clickable, #videoPlane, #bottomVideoPlane').forEach(el => el.setAttribute('visible', false));
 
       arVideo.pause(); arVideo.currentTime = 0;
       bottomVideo.pause(); bottomVideo.currentTime = 0;
@@ -270,6 +249,7 @@
     sceneEl.addEventListener('arReady', () => console.log('MindAR ready'));
     sceneEl.addEventListener('arError', e => console.error('MindAR error:', e.detail));
     
+    // FIXED RAYCASTER — ONLY preventDefault on buttons, NOT on videos
     (function setupManualRaycast() {
       const THREE = AFRAME.THREE;
       const raycaster = new THREE.Raycaster();
@@ -303,11 +283,14 @@
         const hit = getIntersections(cx, cy);
         if (hit.length) {
           const el = hit[0];
-          el.emit('click', null, false);   // This triggers the click listener above
+          // Only prevent default if it's NOT a video plane
+          if (el !== videoPlane && el !== bottomVideoPlane) {
+            evt.preventDefault();
+            evt.stopPropagation();
+          }
+          el.emit('click', null, false);
           el.object3D.scale.set(0.95, 0.95, 0.95);
           setTimeout(() => el.object3D.scale.set(1, 1, 1), 120);
-          evt.preventDefault();
-          evt.stopPropagation();
         }
       }
 
@@ -322,7 +305,7 @@
         userInteracted = true;
         arVideo.muted = false;
         bottomVideo.muted = false;
-        console.log('Audio unlocked - sound now enabled');
+        console.log('Audio unlocked');
       }
     }
     document.addEventListener('touchstart', enableVideoOnInteraction, { once: true });
