@@ -46,7 +46,6 @@
 
   <div id="markerStatus">Target Not Found</div>
 
-  <!-- Register Chroma Key Shader Component -->
   <script>
     AFRAME.registerComponent('chromakey-material', {
       schema: {
@@ -112,7 +111,6 @@
     device-orientation-permission-ui="enabled:false">
 
     <a-assets>
-      <!-- MAIN VIDEO (Top - Vertical with Chroma Key) -->
       <video id="arVideo"
              src="https://raw.githubusercontent.com/ElwinRoy/ar-business-card/main/walkingspoke01.mp4"
              preload="auto" 
@@ -123,7 +121,6 @@
              webkit-playsinline="true">
       </video>
 
-      <!-- BOTTOM VIDEO -->
       <video id="bottomVideo"
              src="https://raw.githubusercontent.com/ElwinRoy/ar-business-card/main/Demo%20VD.mp4"
              preload="auto" 
@@ -134,7 +131,6 @@
              webkit-playsinline="true">
       </video>
 
-      <!-- ICONS (unchanged) -->
       <img id="callIconImg" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='12' fill='%23007AFF'/><path fill='white' d='M34.1 31.6l-4.9-.8c-.7-.1-1.4.1-1.9.6l-3.1 3.1c-4.9-2.5-8.9-6.5-11.4-11.4l3.1-3.1c.5-.5.7-1.2.6-1.9l-.8-4.9c-.2-1.2-1.3-2.1-2.5-2.1H10c-1.4 0-2.6 1.2-2.5 2.6C8 27 21 40 34.4 40c1.4 0 2.6-1.1 2.6-2.5v-3.5c0-1.2-.9-2.3-2.9-2.4z'/></svg>">
       <img id="webIconImg" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='12' fill='%23FF6D00'/><circle cx='24' cy='24' r='14' stroke='white' stroke-width='3' fill='none'/><path stroke='white' stroke-width='3' fill='none' d='M24 10v28M10 24h28'/></svg>">
       <img id="fbIconImg" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='12' fill='%231877F2'/><path fill='white' d='M28 16h4.5V10H28c-5.5 0-8 3-8 8v4h-4v6h4v10h6V28h4.5l1.5-6H26v-3c0-1.5 1.2-3 2-3z'/></svg>">
@@ -150,17 +146,15 @@
 
     <a-entity id="mainMarker" mindar-image-target="targetIndex:0">
 
-      <!-- Top vertical video (unchanged) -->
       <a-plane id="videoPlane"
-               position="0 0.5 0.45"
+               position="0 0.3 0.45"
                rotation="90 0 0"
-               width="0.5"
+               width="0.9"
                height="0.9"
                chromakey-material="src: #arVideo; color: #0000FF; threshold: 0.4; smoothness: 0.15"
                visible="false">
       </a-plane>
 
-      <!-- BOTTOM VIDEO - MOVED FURTHER DOWN (no overlap with physical card) -->
       <a-plane id="bottomVideoPlane"
                position="0 -0.65 0.01"
                rotation="0 0 0"
@@ -170,12 +164,11 @@
                visible="false">
       </a-plane>
 
-      <!-- ICON PLANES (unchanged) -->
-      <a-plane id="callBtnAR" class="clickable" position="-0.75 0.30 0.01" width="0.35" height="0.35" material="src:#callIconImg; transparent:true;" link-trigger="action: call" visible="false"></a-plane>
-      <a-plane id="websiteBtnAR" class="clickable" position="-0.75 -0.30 0.01" width="0.35" height="0.35" material="src:#webIconImg; transparent:true;" link-trigger="action: website" visible="false"></a-plane>
-      <a-plane id="fbBtnAR" class="clickable" position="0.75 0.30 0.01" width="0.30" height="0.30" material="src:#fbIconImg; transparent:true;" link-trigger="action: facebook" visible="false"></a-plane>
-      <a-plane id="igBtnAR" class="clickable" position="0.75 0.00 0.01" width="0.30" height="0.30" material="src:#igIconImg; transparent:true;" link-trigger="action: instagram" visible="false"></a-plane>
-      <a-plane id="lnBtnAR" class="clickable" position="0.75 -0.30 0.01" width="0.30" height="0.30" material="src:#lnIconImg; transparent:true;" link-trigger="action: linkedin" visible="false"></a-plane>
+      <a-plane id="callBtnAR" class="clickable" position="-0.68 0.15 0.01" width="0.22" height="0.22" material="src:#callIconImg; transparent:true;" link-trigger="action: call" visible="false"></a-plane>
+      <a-plane id="websiteBtnAR" class="clickable" position="-0.68 -0.15 0.01" width="0.22" height="0.22" material="src:#webIconImg; transparent:true;" link-trigger="action: website" visible="false"></a-plane>
+      <a-plane id="fbBtnAR" class="clickable" position="0.65 0.22 0.01" width="0.20" height="0.20" material="src:#fbIconImg; transparent:true;" link-trigger="action: facebook" visible="false"></a-plane>
+      <a-plane id="igBtnAR" class="clickable" position="0.65 0.00 0.01" width="0.20" height="0.20" material="src:#igIconImg; transparent:true;" link-trigger="action: instagram" visible="false"></a-plane>
+      <a-plane id="lnBtnAR" class="clickable" position="0.65 -0.22 0.01" width="0.20" height="0.20" material="src:#lnIconImg; transparent:true;" link-trigger="action: linkedin" visible="false"></a-plane>
 
     </a-entity>
 
@@ -267,8 +260,7 @@
 
     sceneEl.addEventListener('arReady', () => console.log('MindAR ready'));
     sceneEl.addEventListener('arError', e => console.error('MindAR error:', e.detail));
-
-    // Manual raycast (unchanged)
+    
     (function setupManualRaycast() {
       const THREE = AFRAME.THREE;
       const raycaster = new THREE.Raycaster();
