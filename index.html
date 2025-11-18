@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MindAR — Business Card AR</title>
 
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
@@ -116,19 +116,19 @@
              preload="auto" 
              loop="true" 
              playsinline 
-             webkit-playsinline
-             muted
-             crossorigin="anonymous">
+             crossorigin="anonymous"
+             webkit-playsinline="true">
       </video>
 
+      <!-- Bottom video now permanently muted + play/pause only on this one -->
       <video id="bottomVideo"
              src="https://raw.githubusercontent.com/ElwinRoy/ar-business-card/main/Demo%20VD.mp4"
              preload="auto" 
              loop="true" 
              playsinline 
-             webkit-playsinline
-             muted
-             crossorigin="anonymous">
+             crossorigin="anonymous"
+             webkit-playsinline="true"
+             muted>
       </video>
 
       <img id="callIconImg" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='12' fill='%23007AFF'/><path fill='white' d='M34.1 31.6l-4.9-.8c-.7-.1-1.4.1-1.9.6l-3.1 3.1c-4.9-2.5-8.9-6.5-11.4-11.4l3.1-3.1c.5-.5.7-1.2.6-1.9l-.8-4.9c-.2-1.2-1.3-2.1-2.5-2.1H10c-1.4 0-2.6 1.2-2.5 2.6C8 27 21 40 34.4 40c1.4 0 2.6-1.1 2.6-2.5v-3.5c0-1.2-.9-2.3-2.9-2.4z'/></svg>">
@@ -204,15 +204,9 @@
       }
     });
 
-    // PAUSE/PLAY BOTH VIDEOS ON TAP — NOW WORKS ON MOBILE
-    videoPlane.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (arVideo.paused) arVideo.play();
-      else arVideo.pause();
-    });
-
-    bottomVideoPlane.addEventListener('click', (e) => {
-      e.stopPropagation();
+    // REMOVED play/pause from top video — it will just autoplay silently
+    // ONLY bottom video has play/pause now
+    bottomVideoPlane.addEventListener('click', () => {
       if (bottomVideo.paused) bottomVideo.play();
       else bottomVideo.pause();
     });
@@ -252,7 +246,7 @@
     sceneEl.addEventListener('arReady', () => console.log('MindAR ready'));
     sceneEl.addEventListener('arError', e => console.error('MindAR error:', e.detail));
     
-    // FIXED RAYCASTER — ONLY preventDefault on buttons, NOT on videos
+    // Your original manual raycaster (unchanged)
     (function setupManualRaycast() {
       const THREE = AFRAME.THREE;
       const raycaster = new THREE.Raycaster();
@@ -286,7 +280,6 @@
         const hit = getIntersections(cx, cy);
         if (hit.length) {
           const el = hit[0];
-          // Only prevent default if it's NOT a video plane
           if (el !== videoPlane && el !== bottomVideoPlane) {
             evt.preventDefault();
             evt.stopPropagation();
@@ -302,33 +295,18 @@
       console.log('Manual raycast handler installed');
     })();
 
-    // FIXED: Audio unlock + black screen fix on iOS
+    // Audio unlock removed for bottom video since it's permanently muted
+    // Top video may still have sound after first tap (mobile policy)
     let userInteracted = false;
     function enableVideoOnInteraction() {
       if (!userInteracted) {
         userInteracted = true;
-        arVideo.muted = false;
-        bottomVideo.muted = false;
-        console.log('Audio unlocked');
-        
-        // Force texture update to prevent black screen on iOS
-        if (videoPlane.getObject3D('mesh') && videoPlane.getObject3D('mesh').material.uniforms) {
-          videoPlane.getObject3D('mesh').material.uniforms.tex.value.needsUpdate = true;
-        }
-        if (bottomVideoPlane.getObject3D('mesh') && bottomVideoPlane.getObject3D('mesh').material.map) {
-          bottomVideoPlane.getObject3D('mesh').material.map.needsUpdate = true;
-        }
+        arVideo.muted = false;  // only top video can have sound after tap
+        console.log('Audio unlocked for top video only');
       }
     }
     document.addEventListener('touchstart', enableVideoOnInteraction, { once: true });
     document.addEventListener('click', enableVideoOnInteraction, { once: true });
-
-    // Extra safeguard: force texture update when video starts playing
-    arVideo.addEventListener('play', () => {
-      if (videoPlane.getObject3D('mesh') && videoPlane.getObject3D('mesh').material.uniforms) {
-        videoPlane.getObject3D('mesh').material.uniforms.tex.value.needsUpdate = true;
-      }
-    });
   </script>
 </body>
 </html>
