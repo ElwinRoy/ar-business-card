@@ -145,7 +145,6 @@
     <a-entity id="mainMarker" mindar-image-target="targetIndex:0">
 
       <a-plane id="videoPlane"
-               class="clickable"
                position="0 0.3 0.45"
                rotation="90 0 0"
                width="0.9"
@@ -154,6 +153,7 @@
                visible="false">
       </a-plane>
 
+      <!-- Bottom video is now clickable (pause/play on tap) -->
       <a-plane id="bottomVideoPlane"
                class="clickable"
                position="0 -0.65 0.01"
@@ -208,15 +208,7 @@
       }
     });
 
-    // PAUSE/PLAY ON TAP — BOTH VIDEOS
-    videoPlane.addEventListener('click', function () {
-      if (arVideo.paused) {
-        arVideo.play();
-      } else {
-        arVideo.pause();
-      }
-    });
-
+    // THIS IS THE ONLY NEW PART — pause/play bottom video on tap
     bottomVideoPlane.addEventListener('click', function () {
       if (bottomVideo.paused) {
         bottomVideo.play();
@@ -311,7 +303,7 @@
         const hit = getIntersections(cx, cy);
         if (hit.length) {
           const el = hit[0];
-          el.emit('click', null, false);
+          el.emit('click', null, false);   // This triggers the click listener above
           el.object3D.scale.set(0.95, 0.95, 0.95);
           setTimeout(() => el.object3D.scale.set(1, 1, 1), 120);
           evt.preventDefault();
