@@ -115,7 +115,6 @@
              src="https://raw.githubusercontent.com/ElwinRoy/ar-business-card/main/walkingspoke01.mp4"
              preload="auto" 
              loop="true" 
-             muted="true"
              playsinline 
              crossorigin="anonymous"
              webkit-playsinline="true">
@@ -125,7 +124,6 @@
              src="https://raw.githubusercontent.com/ElwinRoy/ar-business-card/main/Demo%20VD.mp4"
              preload="auto" 
              loop="true" 
-             muted="true"
              playsinline 
              crossorigin="anonymous"
              webkit-playsinline="true">
@@ -147,6 +145,7 @@
     <a-entity id="mainMarker" mindar-image-target="targetIndex:0">
 
       <a-plane id="videoPlane"
+               class="clickable"
                position="0 0.3 0.45"
                rotation="90 0 0"
                width="0.9"
@@ -156,6 +155,7 @@
       </a-plane>
 
       <a-plane id="bottomVideoPlane"
+               class="clickable"
                position="0 -0.65 0.01"
                rotation="0 0 0"
                width="1.0"
@@ -208,6 +208,23 @@
       }
     });
 
+    // PAUSE/PLAY ON TAP — BOTH VIDEOS
+    videoPlane.addEventListener('click', function () {
+      if (arVideo.paused) {
+        arVideo.play();
+      } else {
+        arVideo.pause();
+      }
+    });
+
+    bottomVideoPlane.addEventListener('click', function () {
+      if (bottomVideo.paused) {
+        bottomVideo.play();
+      } else {
+        bottomVideo.pause();
+      }
+    });
+
     function refreshRaycaster() {
       const cam = document.querySelector('a-camera');
       if (cam && cam.components.raycaster && cam.components.raycaster.refreshObjects) {
@@ -230,7 +247,7 @@
       videoPlane.setAttribute("visible", true);
       bottomVideoPlane.setAttribute("visible", true);
       
-      arVideo.play().then(() => console.log('Top video playing')).catch(err => {
+      arVideo.play().then(() => console.log('Top video playing with sound')).catch(err => {
         console.error('Top video play error:', err);
         setTimeout(() => arVideo.play().catch(e => console.error('Retry failed:', e)), 500);
       });
@@ -294,8 +311,7 @@
         const hit = getIntersections(cx, cy);
         if (hit.length) {
           const el = hit[0];
-          el.emit('click', { detail: { source: 'manualRaycast' } }, false);
-          try { el.click(); } catch {}
+          el.emit('click', null, false);
           el.object3D.scale.set(0.95, 0.95, 0.95);
           setTimeout(() => el.object3D.scale.set(1, 1, 1), 120);
           evt.preventDefault();
@@ -312,11 +328,9 @@
     function enableVideoOnInteraction() {
       if (!userInteracted) {
         userInteracted = true;
-        arVideo.play().catch(() => {});
-        bottomVideo.play().catch(() => {});
-        arVideo.pause();
-        bottomVideo.pause();
-        console.log('Videos initialized on user interaction');
+        arVideo.muted = false;
+        bottomVideo.muted = false;
+        console.log('Audio unlocked - sound now enabled');
       }
     }
     document.addEventListener('touchstart', enableVideoOnInteraction, { once: true });
