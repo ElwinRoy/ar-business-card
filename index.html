@@ -45,6 +45,7 @@
   </div>
 
   <div id="markerStatus">Target Not Found</div>
+  <audio id="unlocker" src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=" autoplay loop></audio>
 
   <script>
     AFRAME.registerComponent('chromakey-material', {
@@ -87,7 +88,8 @@
               gl_FragColor = vec4(video.rgb, alpha);
             }
           `,
-          transparent: true
+          transparent: true,
+          depthWrite: false
         });
         
         this.el.getObject3D('mesh').material = this.material;
@@ -110,7 +112,7 @@
     vr-mode-ui="enabled:false"
     device-orientation-permission-ui="enabled:false">
 
-    <a-assets>
+    <a-assets timeout="30000">
       <video id="arVideo"
              src="https://raw.githubusercontent.com/ElwinRoy/ar-business-card/main/walkingspoke01.mp4"
              preload="auto" 
@@ -149,10 +151,10 @@
 
       <a-plane id="videoPlane"
                class="clickable"
-               position="0 0.3 0.45"
+               position="0 0.55 0.45"
                rotation="90 0 0"
-               width="0.8"
-               height="0.8"
+               width="2.0"
+               height="1.8"
                chromakey-material="src: #arVideo; color: #0000FF; threshold: 0.4; smoothness: 0.15"
                visible="false">
       </a-plane>
@@ -190,8 +192,9 @@
     const bottomVideoPlane = document.getElementById('bottomVideoPlane');
     const bottomVideo = document.getElementById('bottomVideo');
 
-    arVideo.load();
-    bottomVideo.load();
+    const unlocker = document.getElementById('unlocker');
+    unlocker.volume = 0;
+    unlocker.play().catch(() => {});
 
     AFRAME.registerComponent('link-trigger', {
       schema: { action: { type: 'string' } },
@@ -229,10 +232,11 @@
       videoPlane.setAttribute("visible", true);
       bottomVideoPlane.setAttribute("visible", true);
       
+      arVideo.muted = false;
       arVideo.play().catch(() => {});
       bottomVideo.play().catch(() => {});
 
-      setTimeout(refreshRaycaster, 120);
+      setTimeout(refreshRaycaster, 150);
     });
 
     markerEl.addEventListener('targetLost', () => {
@@ -295,17 +299,6 @@
       window.addEventListener('touchstart', onPointerDown, { passive: false });
       console.log('Manual raycast handler installed');
     })();
-
-    let userInteracted = false;
-    function enableVideoOnInteraction() {
-      if (!userInteracted) {
-        userInteracted = true;
-        arVideo.muted = false;
-        console.log('Audio unlocked for top video only');
-      }
-    }
-    document.addEventListener('touchstart', enableVideoOnInteraction, { once: true });
-    document.addEventListener('click', enableVideoOnInteraction, { once: true });
   </script>
 </body>
 </html>
